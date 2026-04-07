@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, Float, Integer, String, Text, func
+from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from backend.database import Base
@@ -36,7 +36,11 @@ class ProtocolEntry(Base):
     __tablename__ = "protocol_entries"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    intervention_id: Mapped[int] = mapped_column(Integer, index=True)
+    intervention_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("interventions.id", ondelete="CASCADE"),
+        index=True,
+    )
     date: Mapped[str] = mapped_column(String(10), index=True)  # YYYY-MM-DD
     complied: Mapped[bool] = mapped_column(Boolean, default=False)
     notes: Mapped[str] = mapped_column(Text, default="")
