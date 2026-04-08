@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from backend.config import settings
 from backend.database import SessionLocal, init_db
 from backend.routers import biomarkers, checklist, protocols
 from backend.seed_data.protocols import seed_tier1_protocols
