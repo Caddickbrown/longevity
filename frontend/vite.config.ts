@@ -22,6 +22,8 @@ export default defineConfig({
       '/journal': 'http://localhost:8000',
       '/beliefs': 'http://localhost:8000',
       '/export': 'http://localhost:8000',
+      '/teaching': 'http://localhost:8000',
+      '/chat': 'http://localhost:8000',
     },
   },
 })

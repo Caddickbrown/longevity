@@ -1,4 +1,4 @@
-import type { BiomarkerReading, Intervention, ProtocolEntry, CorrelationResult, ResearchDigest, JournalEntry, BeliefSnapshot } from '@/types'
+import type { BiomarkerReading, Intervention, ProtocolEntry, CorrelationResult, ResearchDigest, JournalEntry, BeliefSnapshot, TeachingListItem, ProtocolExplanation, ConversationMessage } from '@/types'
 
 const BASE = ''
 
@@ -154,4 +154,54 @@ export async function getBeliefsByTitle(title: string): Promise<BeliefSnapshot[]
   const res = await fetch(`${BASE}/beliefs/by-title/${encodeURIComponent(title)}`)
   if (!res.ok) throw new Error('Failed to fetch beliefs by title')
   return res.json()
+}
+
+export async function getTeachingList(): Promise<TeachingListItem[]> {
+  const res = await fetch(`${BASE}/teaching/`)
+  if (!res.ok) throw new Error('Failed to fetch teaching list')
+  return res.json()
+}
+
+export async function getTeachingExplanation(interventionId: number): Promise<ProtocolExplanation> {
+  const res = await fetch(`${BASE}/teaching/${interventionId}`)
+  if (!res.ok) throw new Error('Failed to fetch teaching explanation')
+  return res.json()
+}
+
+export async function generateExplanation(interventionId: number): Promise<ProtocolExplanation> {
+  const res = await fetch(`${BASE}/teaching/generate/${interventionId}`, { method: 'POST' })
+  if (!res.ok) throw new Error('Failed to generate explanation')
+  return res.json()
+}
+
+export async function generateAllExplanations(): Promise<{ generated: number; skipped: number }> {
+  const res = await fetch(`${BASE}/teaching/generate-all`, { method: 'POST' })
+  if (!res.ok) throw new Error('Failed to generate all explanations')
+  return res.json()
+}
+
+export async function sendChatMessage(message: string): Promise<ConversationMessage> {
+  const res = await fetch(`${BASE}/chat/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message }),
+  })
+  if (!res.ok) {
+    const text = await res.text()
+    let detail = text
+    try { detail = JSON.parse(text)?.detail ?? text } catch { /* use raw text */ }
+    throw Object.assign(new Error(detail), { status: res.status })
+  }
+  return res.json()
+}
+
+export async function getChatHistory(): Promise<ConversationMessage[]> {
+  const res = await fetch(`${BASE}/chat/history`)
+  if (!res.ok) throw new Error('Failed to fetch chat history')
+  return res.json()
+}
+
+export async function clearChatHistory(): Promise<void> {
+  const res = await fetch(`${BASE}/chat/history`, { method: 'DELETE' })
+  if (!res.ok) throw new Error('Failed to clear chat history')
 }

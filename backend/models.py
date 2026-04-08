@@ -66,6 +66,30 @@ class Intervention(Base):
     ended_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
 
+class ProtocolExplanation(Base):
+    __tablename__ = "protocol_explanations"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    intervention_id: Mapped[int] = mapped_column(
+        Integer, ForeignKey("interventions.id", ondelete="CASCADE"), unique=True, index=True
+    )
+    explanation: Mapped[str] = mapped_column(Text)
+    why_it_matters: Mapped[str] = mapped_column(Text)
+    how_to_implement: Mapped[str] = mapped_column(Text)
+    sources: Mapped[list] = mapped_column(JSON, default=list)  # [{title, url}]
+    difficulty: Mapped[str] = mapped_column(String(20))  # easy | moderate | hard
+    generated_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+
+class Conversation(Base):
+    __tablename__ = "conversations"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    role: Mapped[str] = mapped_column(String(20))  # user | assistant
+    content: Mapped[str] = mapped_column(Text)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), index=True)
+
+
 class ProtocolEntry(Base):
     __tablename__ = "protocol_entries"
 

@@ -65,3 +65,30 @@ export interface BeliefSnapshot {
   tags: string[]
   created_at: string
 }
+
+export interface TeachingListItem {
+  intervention_id: number
+  name: string
+  tier: number
+  evidence_grade: string
+  has_explanation: boolean
+  difficulty: string | null
+}
+
+export interface ProtocolExplanation {
+  id: number
+  intervention_id: number
+  explanation: string
+  why_it_matters: string
+  how_to_implement: string
+  sources: { title: string; url: string }[]
+  difficulty: string
+  generated_at: string
+}
+
+export interface ConversationMessage {
+  id: number
+  role: 'user' | 'assistant'
+  content: string
+  created_at: string
+}

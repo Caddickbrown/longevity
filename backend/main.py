@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 from backend.config import settings
 from backend.database import SessionLocal, get_db, init_db
 from backend.models import BeliefSnapshot, BiomarkerReading, Intervention, JournalEntry, ProtocolEntry, ResearchDigest
-from backend.routers import beliefs, biomarkers, blood_panel, checklist, correlation, journal, protocols, research
+from backend.routers import beliefs, biomarkers, blood_panel, chat, checklist, correlation, journal, protocols, research, teaching
 from backend.schemas import BeliefSnapshotOut, BiomarkerReadingOut, InterventionOut, JournalEntryOut, ProtocolEntryOut, ResearchDigestOut
 from sqlalchemy import select
 from backend.seed_data.protocols import seed_tier1_protocols
@@ -45,6 +45,8 @@ app.include_router(correlation.router)
 app.include_router(blood_panel.router)
 app.include_router(journal.router)
 app.include_router(beliefs.router)
+app.include_router(teaching.router)
+app.include_router(chat.router)
 
 
 @app.get("/export")

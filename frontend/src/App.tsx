@@ -7,6 +7,8 @@ import { Research } from '@/pages/Research'
 import { BloodPanel } from '@/pages/BloodPanel'
 import { Journal } from '@/pages/Journal'
 import { Beliefs } from '@/pages/Beliefs'
+import { Teaching } from '@/pages/Teaching'
+import { Chat } from '@/pages/Chat'
 
 export default function App() {
   return (
@@ -25,6 +27,8 @@ export default function App() {
             <TabsTrigger value="blood-panel">Blood Panel</TabsTrigger>
             <TabsTrigger value="journal">Journal</TabsTrigger>
             <TabsTrigger value="beliefs">Beliefs</TabsTrigger>
+            <TabsTrigger value="teaching">Teaching</TabsTrigger>
+            <TabsTrigger value="chat">Chat</TabsTrigger>
           </TabsList>
           <TabsContent value="dashboard"><Dashboard /></TabsContent>
           <TabsContent value="checklist"><Checklist /></TabsContent>
@@ -34,6 +38,8 @@ export default function App() {
           <TabsContent value="blood-panel"><BloodPanel /></TabsContent>
           <TabsContent value="journal"><Journal /></TabsContent>
           <TabsContent value="beliefs"><Beliefs /></TabsContent>
+          <TabsContent value="teaching"><Teaching /></TabsContent>
+          <TabsContent value="chat"><Chat /></TabsContent>
         </Tabs>
       </main>
     </div>

@@ -32,6 +32,28 @@ class InterventionOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class ProtocolExplanationOut(BaseModel):
+    id: int
+    intervention_id: int
+    explanation: str
+    why_it_matters: str
+    how_to_implement: str
+    sources: list[dict]
+    difficulty: str
+    generated_at: datetime
+
+    model_config = {"from_attributes": True}
+
+
+class ConversationMessageOut(BaseModel):
+    id: int
+    role: str
+    content: str
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
+
+
 class JournalEntryCreate(BaseModel):
     date: str  # YYYY-MM-DD
     body: str = ""
