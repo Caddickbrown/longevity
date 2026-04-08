@@ -1,0 +1,15 @@
+[Unit]
+Description=Longevity OS — Vite preview frontend
+After=network.target longevity-backend.service
+
+[Service]
+Type=simple
+User=dcb
+WorkingDirectory=/home/dcb/longevity/frontend
+ExecStartPre=/usr/bin/npm run build
+ExecStart=/usr/bin/npm run preview -- --host 0.0.0.0 --port 3000
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
