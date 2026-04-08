@@ -50,17 +50,29 @@ class BackfillRequest(BaseModel):
 
 
 @router.post("/sync/backfill")
-def backfill_garmin(payload: BackfillRequest, db: Session = Depends(get_db)):
-    from backend.services.garmin import get_garmin_client, sync_date, GarminSyncError
+def backfill_health_data(payload: BackfillRequest, db: Session = Depends(get_db)):
+    from backend.services.health_bridge import HealthBridgeError, sync as bridge_sync
+    from backend.services.garmin import GarminSyncError, get_garmin_client, sync_date as garmin_sync_date
+
+    results = {}
+
+    # Primary: health-at-home bridge
+    try:
+        inserted = bridge_sync(days=payload.days, db_session=db)
+        results["health_at_home"] = inserted
+    except HealthBridgeError as e:
+        results["health_at_home_error"] = str(e)
+
+    # Garmin fallback for HRV/VO2
     try:
         client = get_garmin_client()
-    except (GarminSyncError, Exception) as e:
-        raise HTTPException(status_code=503, detail=str(e))
+        total = 0
+        today = date.today()
+        for i in range(min(payload.days, 90)):  # Garmin API limit
+            d = today - timedelta(days=i)
+            total += garmin_sync_date(client, d, db)
+        results["garmin"] = total
+    except Exception:
+        results["garmin"] = 0  # Expected when no credentials or rate-limited
 
-    total = 0
-    today = date.today()
-    for i in range(payload.days):
-        d = today - timedelta(days=i)
-        total += sync_date(client, d, db)
-
-    return {"inserted": total, "days_synced": payload.days}
+    return {"inserted": sum(v for v in results.values() if isinstance(v, int)), "days_synced": payload.days, "detail": results}
