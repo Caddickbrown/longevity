@@ -8,7 +8,7 @@ from backend.config import settings
 
 logger = logging.getLogger(__name__)
 
-HEALTH_AT_HOME_URL = "http://100.70.55.16:49999"
+HEALTH_AT_HOME_URL = settings.health_at_home_url
 
 # Metrics with simple {date, value} structure → (our_metric_name, unit)
 SIMPLE_METRICS: dict[str, tuple[str, str]] = {

@@ -26,7 +26,7 @@ app = FastAPI(title="Longevity OS", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://100.70.55.16:3000"],
+    allow_origins=[o.strip() for o in settings.cors_origins.split(",")],
     allow_methods=["*"],
     allow_headers=["*"],
 )
