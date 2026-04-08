@@ -32,6 +32,35 @@ class InterventionOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class JournalEntryCreate(BaseModel):
+    date: str  # YYYY-MM-DD
+    body: str = ""
+    tags: list[str] = []
+    mood: int | None = None
+    energy: int | None = None
+
+
+class JournalEntryOut(JournalEntryCreate):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = {"from_attributes": True}
+
+
+class BeliefSnapshotCreate(BaseModel):
+    title: str
+    body: str
+    tags: list[str] = []
+
+
+class BeliefSnapshotOut(BeliefSnapshotCreate):
+    id: int
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
+
+
 class ResearchDigestOut(BaseModel):
     id: int
     generated_at: datetime

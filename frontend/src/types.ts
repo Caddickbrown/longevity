@@ -46,3 +46,22 @@ export interface ResearchDigest {
   interventions_mentioned: string[]
   raw_response: string
 }
+
+export interface JournalEntry {
+  id: number
+  date: string
+  body: string
+  tags: string[]
+  mood: number | null
+  energy: number | null
+  created_at: string
+  updated_at: string
+}
+
+export interface BeliefSnapshot {
+  id: number
+  title: string
+  body: string
+  tags: string[]
+  created_at: string
+}

@@ -5,6 +5,8 @@ import { Checklist } from '@/pages/Checklist'
 import { Correlation } from '@/pages/Correlation'
 import { Research } from '@/pages/Research'
 import { BloodPanel } from '@/pages/BloodPanel'
+import { Journal } from '@/pages/Journal'
+import { Beliefs } from '@/pages/Beliefs'
 
 export default function App() {
   return (
@@ -21,6 +23,8 @@ export default function App() {
             <TabsTrigger value="correlation">Correlation</TabsTrigger>
             <TabsTrigger value="research">Research</TabsTrigger>
             <TabsTrigger value="blood-panel">Blood Panel</TabsTrigger>
+            <TabsTrigger value="journal">Journal</TabsTrigger>
+            <TabsTrigger value="beliefs">Beliefs</TabsTrigger>
           </TabsList>
           <TabsContent value="dashboard"><Dashboard /></TabsContent>
           <TabsContent value="checklist"><Checklist /></TabsContent>
@@ -28,6 +32,8 @@ export default function App() {
           <TabsContent value="correlation"><Correlation /></TabsContent>
           <TabsContent value="research"><Research /></TabsContent>
           <TabsContent value="blood-panel"><BloodPanel /></TabsContent>
+          <TabsContent value="journal"><Journal /></TabsContent>
+          <TabsContent value="beliefs"><Beliefs /></TabsContent>
         </Tabs>
       </main>
     </div>

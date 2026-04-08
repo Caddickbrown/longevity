@@ -1,4 +1,4 @@
-import type { BiomarkerReading, Intervention, ProtocolEntry, CorrelationResult, ResearchDigest } from '@/types'
+import type { BiomarkerReading, Intervention, ProtocolEntry, CorrelationResult, ResearchDigest, JournalEntry, BeliefSnapshot } from '@/types'
 
 const BASE = ''
 
@@ -105,5 +105,53 @@ export async function triggerBackfill(days: number): Promise<{ inserted: number;
     body: JSON.stringify({ days }),
   })
   if (!res.ok) throw new Error('Backfill failed')
+  return res.json()
+}
+
+export async function upsertJournalEntry(data: Omit<JournalEntry, 'id' | 'created_at' | 'updated_at'>): Promise<JournalEntry> {
+  const res = await fetch(`${BASE}/journal/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) throw new Error('Failed to save journal entry')
+  return res.json()
+}
+
+export async function getJournalEntries(params?: { from_date?: string; to_date?: string }): Promise<JournalEntry[]> {
+  const query = new URLSearchParams()
+  if (params?.from_date) query.set('from_date', params.from_date)
+  if (params?.to_date) query.set('to_date', params.to_date)
+  const qs = query.toString()
+  const res = await fetch(`${BASE}/journal/${qs ? `?${qs}` : ''}`)
+  if (!res.ok) throw new Error('Failed to fetch journal entries')
+  return res.json()
+}
+
+export async function getJournalEntry(date: string): Promise<JournalEntry> {
+  const res = await fetch(`${BASE}/journal/${date}`)
+  if (!res.ok) throw new Error('Failed to fetch journal entry')
+  return res.json()
+}
+
+export async function createBeliefSnapshot(data: Omit<BeliefSnapshot, 'id' | 'created_at'>): Promise<BeliefSnapshot> {
+  const res = await fetch(`${BASE}/beliefs/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data),
+  })
+  if (!res.ok) throw new Error('Failed to create belief snapshot')
+  return res.json()
+}
+
+export async function getBeliefSnapshots(): Promise<BeliefSnapshot[]> {
+  const res = await fetch(`${BASE}/beliefs/`)
+  if (!res.ok) throw new Error('Failed to fetch belief snapshots')
+  return res.json()
+}
+
+export async function getBeliefsByTitle(title: string): Promise<BeliefSnapshot[]> {
+  const res = await fetch(`${BASE}/beliefs/by-title/${encodeURIComponent(title)}`)
+  if (!res.ok) throw new Error('Failed to fetch beliefs by title')
   return res.json()
 }

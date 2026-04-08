@@ -19,6 +19,9 @@ export default defineConfig({
       '/research': 'http://localhost:8000',
       '/correlation': 'http://localhost:8000',
       '/blood-panel': 'http://localhost:8000',
+      '/journal': 'http://localhost:8000',
+      '/beliefs': 'http://localhost:8000',
+      '/export': 'http://localhost:8000',
     },
   },
 })

@@ -29,6 +29,29 @@ class ResearchDigest(Base):
     raw_response: Mapped[str] = mapped_column(Text, default="")
 
 
+class JournalEntry(Base):
+    __tablename__ = "journal_entries"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    date: Mapped[str] = mapped_column(String(10), unique=True, index=True)  # YYYY-MM-DD
+    body: Mapped[str] = mapped_column(Text, default="")
+    tags: Mapped[list] = mapped_column(JSON, default=list)
+    mood: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    energy: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())
+
+
+class BeliefSnapshot(Base):
+    __tablename__ = "belief_snapshots"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    title: Mapped[str] = mapped_column(String(200), index=True)
+    body: Mapped[str] = mapped_column(Text)
+    tags: Mapped[list] = mapped_column(JSON, default=list)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), index=True)
+
+
 class Intervention(Base):
     __tablename__ = "interventions"
 
