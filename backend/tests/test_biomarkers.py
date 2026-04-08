@@ -60,3 +60,9 @@ def test_list_biomarkers_by_date_range(client):
     data = response.json()
     assert len(data) == 1
     assert data[0]["value"] == 60.0
+
+
+def test_backfill_endpoint_exists(client):
+    # With no Garmin credentials in test env, should return 503 (not 404)
+    response = client.post("/biomarkers/sync/backfill", json={"days": 7})
+    assert response.status_code in (200, 503)

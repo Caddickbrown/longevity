@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from backend.database import SessionLocal, init_db
 from backend.routers import biomarkers, checklist, protocols
 from backend.seed_data.protocols import seed_tier1_protocols
+from backend.services.scheduler import start_scheduler, stop_scheduler
 
 
 @asynccontextmanager
@@ -16,7 +17,9 @@ async def lifespan(app: FastAPI):
         seed_tier1_protocols(db)
     finally:
         db.close()
+    start_scheduler()
     yield
+    stop_scheduler()
 
 
 app = FastAPI(title="Longevity OS", lifespan=lifespan)

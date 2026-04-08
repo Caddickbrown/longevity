@@ -54,7 +54,7 @@ def backfill_garmin(payload: BackfillRequest, db: Session = Depends(get_db)):
     from backend.services.garmin import get_garmin_client, sync_date, GarminSyncError
     try:
         client = get_garmin_client()
-    except GarminSyncError as e:
+    except (GarminSyncError, Exception) as e:
         raise HTTPException(status_code=503, detail=str(e))
 
     total = 0
