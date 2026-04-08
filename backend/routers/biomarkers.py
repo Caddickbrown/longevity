@@ -32,9 +32,15 @@ def list_readings(
     if metric:
         stmt = stmt.where(BiomarkerReading.metric == metric)
     if from_date:
-        stmt = stmt.where(BiomarkerReading.recorded_at >= datetime.fromisoformat(from_date))
+        try:
+            stmt = stmt.where(BiomarkerReading.recorded_at >= datetime.fromisoformat(from_date))
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"Invalid from_date format: {from_date}. Use YYYY-MM-DD.")
     if to_date:
-        stmt = stmt.where(BiomarkerReading.recorded_at <= datetime.fromisoformat(to_date + "T23:59:59"))
+        try:
+            stmt = stmt.where(BiomarkerReading.recorded_at <= datetime.fromisoformat(to_date + "T23:59:59"))
+        except ValueError:
+            raise HTTPException(status_code=400, detail=f"Invalid to_date format: {to_date}. Use YYYY-MM-DD.")
     stmt = stmt.order_by(BiomarkerReading.recorded_at.asc())
     return db.execute(stmt).scalars().all()
 
