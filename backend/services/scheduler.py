@@ -42,10 +42,39 @@ def sync_health_data() -> None:
         db.close()
 
 
+def generate_research_digest() -> None:
+    """Fetch latest longevity research and synthesise a digest via Claude."""
+    from backend.config import settings
+    from backend.models import Intervention, ResearchDigest
+    from backend.services.research_fetcher import FetchError, fetch_research
+    from backend.services.research_synthesiser import SynthesisError, synthesise
+    from sqlalchemy import select
+
+    if not settings.anthropic_api_key:
+        logger.info("Research digest skipped — ANTHROPIC_API_KEY not set")
+        return
+
+    db = SessionLocal()
+    try:
+        protocols = db.execute(select(Intervention.name)).scalars().all()
+        articles = fetch_research()
+        digest_data = synthesise(articles, list(protocols))
+        db.add(ResearchDigest(**digest_data))
+        db.commit()
+        logger.info("Research digest generated — %d interventions mentioned", len(digest_data["interventions_mentioned"]))
+    except (FetchError, SynthesisError) as e:
+        logger.warning("Research digest failed: %s", e)
+    except Exception:
+        logger.exception("Research digest failed unexpectedly")
+    finally:
+        db.close()
+
+
 def start_scheduler() -> None:
     scheduler.add_job(sync_health_data, "interval", hours=1, id="health_sync", replace_existing=True)
+    scheduler.add_job(generate_research_digest, "cron", day_of_week="sun", hour=6, id="research_digest", replace_existing=True)
     scheduler.start()
-    logger.info("Scheduler started — health sync every hour")
+    logger.info("Scheduler started — health sync hourly, research digest weekly (Sun 06:00)")
 
 
 def stop_scheduler() -> None:

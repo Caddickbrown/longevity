@@ -1,4 +1,4 @@
-import type { BiomarkerReading, Intervention, ProtocolEntry } from '@/types'
+import type { BiomarkerReading, Intervention, ProtocolEntry, CorrelationResult, ResearchDigest } from '@/types'
 
 const BASE = ''
 
@@ -51,6 +51,50 @@ export async function upsertChecklistEntry(data: {
     body: JSON.stringify({ notes: '', ...data }),
   })
   if (!res.ok) throw new Error('Failed to save checklist entry')
+  return res.json()
+}
+
+export async function getCorrelation(params: {
+  metric: string
+  from_date?: string
+  to_date?: string
+}): Promise<CorrelationResult> {
+  const query = new URLSearchParams()
+  query.set('metric', params.metric)
+  if (params.from_date) query.set('from_date', params.from_date)
+  if (params.to_date) query.set('to_date', params.to_date)
+  const res = await fetch(`${BASE}/correlation/?${query}`)
+  if (!res.ok) throw new Error('Failed to fetch correlation')
+  return res.json()
+}
+
+export async function getResearchDigests(): Promise<ResearchDigest[]> {
+  const res = await fetch(`${BASE}/research/`)
+  if (!res.ok) throw new Error('Failed to fetch research digests')
+  return res.json()
+}
+
+export async function generateResearchDigest(): Promise<ResearchDigest> {
+  const res = await fetch(`${BASE}/research/generate`, { method: 'POST' })
+  if (!res.ok) {
+    const text = await res.text()
+    let detail = text
+    try { detail = JSON.parse(text)?.detail ?? text } catch { /* use raw text */ }
+    throw new Error(detail)
+  }
+  return res.json()
+}
+
+export async function importBloodPanel(file: File): Promise<{ inserted: number; skipped: number }> {
+  const form = new FormData()
+  form.append('file', file)
+  const res = await fetch(`${BASE}/blood-panel/import`, { method: 'POST', body: form })
+  if (!res.ok) {
+    const text = await res.text()
+    let detail = text
+    try { detail = JSON.parse(text)?.detail ?? text } catch { /* use raw text */ }
+    throw new Error(detail)
+  }
   return res.json()
 }
 

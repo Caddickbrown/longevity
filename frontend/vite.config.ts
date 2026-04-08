@@ -16,6 +16,9 @@ export default defineConfig({
       '/biomarkers': 'http://localhost:8000',
       '/protocols': 'http://localhost:8000',
       '/checklist': 'http://localhost:8000',
+      '/research': 'http://localhost:8000',
+      '/correlation': 'http://localhost:8000',
+      '/blood-panel': 'http://localhost:8000',
     },
   },
 })

@@ -2,6 +2,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Dashboard } from '@/pages/Dashboard'
 import { Protocols } from '@/pages/Protocols'
 import { Checklist } from '@/pages/Checklist'
+import { Correlation } from '@/pages/Correlation'
+import { Research } from '@/pages/Research'
+import { BloodPanel } from '@/pages/BloodPanel'
 
 export default function App() {
   return (
@@ -15,10 +18,16 @@ export default function App() {
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="checklist">Today</TabsTrigger>
             <TabsTrigger value="protocols">Protocols</TabsTrigger>
+            <TabsTrigger value="correlation">Correlation</TabsTrigger>
+            <TabsTrigger value="research">Research</TabsTrigger>
+            <TabsTrigger value="blood-panel">Blood Panel</TabsTrigger>
           </TabsList>
           <TabsContent value="dashboard"><Dashboard /></TabsContent>
           <TabsContent value="checklist"><Checklist /></TabsContent>
           <TabsContent value="protocols"><Protocols /></TabsContent>
+          <TabsContent value="correlation"><Correlation /></TabsContent>
+          <TabsContent value="research"><Research /></TabsContent>
+          <TabsContent value="blood-panel"><BloodPanel /></TabsContent>
         </Tabs>
       </main>
     </div>

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, Float, ForeignKey, Integer, String, Text, func
+from sqlalchemy import JSON, Boolean, DateTime, Float, ForeignKey, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from backend.database import Base
@@ -16,6 +16,17 @@ class BiomarkerReading(Base):
     unit: Mapped[str] = mapped_column(String(50))
     recorded_at: Mapped[datetime] = mapped_column(DateTime, index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+
+class ResearchDigest(Base):
+    __tablename__ = "research_digests"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    generated_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now(), index=True)
+    source: Mapped[str] = mapped_column(String(100))  # e.g. "pubmed+claude"
+    summary: Mapped[str] = mapped_column(Text)
+    interventions_mentioned: Mapped[list] = mapped_column(JSON, default=list)
+    raw_response: Mapped[str] = mapped_column(Text, default="")
 
 
 class Intervention(Base):

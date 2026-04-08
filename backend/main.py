@@ -5,7 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.config import settings
 from backend.database import SessionLocal, init_db
-from backend.routers import biomarkers, checklist, protocols
+from backend.routers import biomarkers, checklist, correlation, protocols, research
+from backend.routers import blood_panel
 from backend.seed_data.protocols import seed_tier1_protocols
 from backend.services.scheduler import start_scheduler, stop_scheduler
 
@@ -35,3 +36,6 @@ app.add_middleware(
 app.include_router(biomarkers.router)
 app.include_router(protocols.router)
 app.include_router(checklist.router)
+app.include_router(research.router)
+app.include_router(correlation.router)
+app.include_router(blood_panel.router)

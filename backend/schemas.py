@@ -32,6 +32,17 @@ class InterventionOut(BaseModel):
     model_config = {"from_attributes": True}
 
 
+class ResearchDigestOut(BaseModel):
+    id: int
+    generated_at: datetime
+    source: str
+    summary: str
+    interventions_mentioned: list[str]
+    raw_response: str
+
+    model_config = {"from_attributes": True}
+
+
 class ProtocolEntryCreate(BaseModel):
     intervention_id: int
     date: str  # YYYY-MM-DD

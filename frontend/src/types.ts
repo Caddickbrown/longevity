@@ -28,3 +28,21 @@ export interface ProtocolEntry {
   notes: string
   created_at: string
 }
+
+export interface CorrelationResult {
+  metric: string
+  from_date: string
+  to_date: string
+  data: { date: string; value: number; compliance: number }[]
+  pearson_r: number | null
+  p_value: number | null
+}
+
+export interface ResearchDigest {
+  id: number
+  generated_at: string
+  source: string
+  summary: string
+  interventions_mentioned: string[]
+  raw_response: string
+}
